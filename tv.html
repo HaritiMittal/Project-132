@@ -20,11 +20,16 @@
         <a href="index.html" class="btn">Back</a>
         <br><br><br><br>
         <h3 id="status" class="btn btn-danger"></h3>
+        <br>
+        <h3 class="btn btn-success" style="font-size:15px;">
+            There are 6 big objects in the image from which cocossd model has detected 2 objects.
+        </h3>
     </center>
 
     <script>
         var img = "";
         var status = "";
+        objects = [];
 
         function preload() {
             img = loadImage('tv.jpg')
@@ -49,22 +54,24 @@
             }
             else {
                 console.log(result);
+                objects = result;
             }
         }
 
         function draw() {
             image(img, 0, 0, 640, 420);
-            fill("#FF0000");
-            text("TV", 150, 245);
-            noFill();
-            stroke("#FF0000");
-            rect(140, 230, 300, 190);
+            if (status != "") {
+                for (var i = 0; i < objects.length; i++) {
+                    document.getElementById("status").innerHTML = "Status: Objects Detected";
 
-            fill("#FF0000");
-            text("AC", 190, 90);
-            noFill();
-            stroke("#FF0000");
-            rect(180, 70, 250, 100);
+                    percent = floor(objects[i].confidence * 100);
+                    fill("#FF0000");
+                    text(objects[i].label + " " + percent + "%", objects[i].x + 15, objects[i].y + 15);
+                    noFill();
+                    stroke("#FF0000");
+                    rect(objects[i].x, objects[i].y, objects[i].width, objects[i].height);
+                }
+            }
         }
 
     </script>
